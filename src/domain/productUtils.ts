@@ -12,7 +12,7 @@
  *   - isWithinVolumeTolerance → decide whether a store product is an
  *                               acceptable substitute for a catalog entry
  */
-import type { ProductCatalog, ProductUnit } from './ProductCatalog'
+import type { ProductCatalog, ProductUnit } from "./ProductCatalog";
 
 /**
  * Compute the price per unit of measurement.
@@ -29,8 +29,8 @@ import type { ProductCatalog, ProductUnit } from './ProductCatalog'
  * @returns        Price per single unit, or 0 if quantity is 0.
  */
 export function computeUnitPrice(price: number, quantity: number): number {
-  if (quantity <= 0) return 0
-  return price / quantity
+  if (quantity <= 0) return 0;
+  return price / quantity;
 }
 
 /**
@@ -61,13 +61,13 @@ export function isWithinVolumeTolerance(
   candidateUnit: ProductUnit,
 ): boolean {
   // Units must match — cross-unit comparison requires a separate converter.
-  if (catalogProduct.unit !== candidateUnit) return false
+  if (catalogProduct.unit !== candidateUnit) return false;
 
-  const { targetQuantity, volumeTolerancePct } = catalogProduct
-  const tolerance = volumeTolerancePct / 100
+  const { targetQuantity, volumeTolerancePct } = catalogProduct;
+  const tolerance = volumeTolerancePct / 100;
 
-  const minQty = targetQuantity * (1 - tolerance)
-  const maxQty = targetQuantity * (1 + tolerance)
+  const minQty = targetQuantity * (1 - tolerance);
+  const maxQty = targetQuantity * (1 + tolerance);
 
-  return candidateQty >= minQty && candidateQty <= maxQty
+  return candidateQty >= minQty && candidateQty <= maxQty;
 }

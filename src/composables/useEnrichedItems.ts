@@ -17,6 +17,7 @@
  */
 import { computed, toValue } from 'vue'
 import type { ComputedRef, MaybeRefOrGetter } from 'vue'
+
 import type { ShoppingListItem, ProductType, ProductUnit } from '@/domain'
 import { getProductById } from '@/services'
 

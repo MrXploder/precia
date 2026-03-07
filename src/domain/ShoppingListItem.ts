@@ -6,17 +6,20 @@
  */
 export interface ShoppingListItem {
   /** Unique item identifier. */
-  id: string
+  id: string;
 
   /** ID of the parent ShoppingList this item belongs to. */
-  shoppingListId: string
+  shoppingListId: string;
 
   /** ID of the ProductCatalog entry this item references. */
-  productId: string
+  productId: string;
 
   /**
    * Number of units the user wants to buy.
    * Minimum value is 1.
    */
-  quantity: number
+  quantity: number;
+
+  /** Timestamp of when this item was added to the list. */
+  createdAt: Date;
 }

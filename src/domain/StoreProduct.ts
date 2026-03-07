@@ -16,7 +16,7 @@
  *   price: 1290
  *   zone:  "santiago-centro"
  */
-import type { ProductUnit } from './ProductCatalog'
+import type { ProductUnit } from "./ProductCatalog";
 
 // ─── Phase 2 ────────────────────────────────────────────────────────────────
 // Defined now for architectural completeness.
@@ -25,10 +25,10 @@ import type { ProductUnit } from './ProductCatalog'
 
 export interface StoreProduct {
   /** Unique identifier for this store product entry. */
-  id: string
+  id: string;
 
   /** ID of the Store this product belongs to. */
-  storeId: string
+  storeId: string;
 
   /**
    * Raw product name as scraped from the store website.
@@ -37,19 +37,25 @@ export interface StoreProduct {
    *
    * Example: "AZUCAR IANSA 1KG", "Azucar blanca Iansa 1 kilo"
    */
-  name: string
+  name: string;
 
   /** Brand name as shown in the store, if available. */
-  brand: string | null
+  brand: string | null;
 
   /** Product quantity as listed by the store. */
-  quantity: number
+  quantity: number;
 
   /** Unit of measurement for the quantity. */
-  unit: ProductUnit
+  unit: ProductUnit;
 
-  /** Price in the local currency (CLP for Chile). */
-  price: number
+  /** Price in local currency. */
+  price: number;
+
+  /**
+   * ISO 4217 currency code.
+   * Example: "CLP" for Chilean peso.
+   */
+  currency: string;
 
   /**
    * Geographic zone where this price applies.
@@ -57,8 +63,8 @@ export interface StoreProduct {
    *
    * Example: "santiago-centro", "santiago-norte"
    */
-  zone: string
+  zone: string;
 
   /** Timestamp of when this price was scraped. */
-  scrapedAt: Date
+  scrapedAt: Date;
 }

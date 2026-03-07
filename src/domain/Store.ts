@@ -17,14 +17,17 @@
 
 export interface Store {
   /** Unique store identifier. */
-  id: string
+  id: string;
 
   /** Display name of the supermarket chain (e.g. "Lider", "Jumbo"). */
-  name: string
+  name: string;
 
   /**
    * ISO 3166-1 alpha-2 country code where this chain operates.
    * Example: "CL" for Chile.
    */
-  country: string
+  country: string;
+
+  /** Timestamp of when this store entry was created. */
+  createdAt: Date;
 }

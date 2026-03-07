@@ -11,20 +11,30 @@
  * `items` is a computed ref — it always reflects the current state of the
  * shared store filtered to the given list.
  *
- * Phase 1: in-memory only.
- * Phase 2: replace the module-level array with Firestore listeners.
+ * Phase 1: in-memory only. IDs and timestamps are generated client-side.
+ *
+ * PocketBase migration (next step):
+ *   Replace the mutation calls below with their async PocketBase equivalents:
+ *
+ *   addItem        →  createShoppingListItem(...)       from '@/services'
+ *   removeItem     →  deleteShoppingListItem(id)        from '@/services'
+ *   updateQuantity →  updateShoppingListItemQuantity()  from '@/services'
+ *   Initial load   →  fetchShoppingListItems(listId)    from '@/services'
+ *
+ *   The public API (items, addItem, removeItem, updateQuantity) should
+ *   remain unchanged so views don't need to be updated.
  */
-import { ref, computed } from 'vue'
-import type { ShoppingListItem } from '@/domain'
+import { ref, computed } from "vue";
+import type { ShoppingListItem } from "@/domain";
 
 // Module-level state — a flat pool of all items across all lists.
-const allItems = ref<ShoppingListItem[]>([])
+const allItems = ref<ShoppingListItem[]>([]);
 
 export function useShoppingList(shoppingListId: string) {
   /** Reactive, filtered view of items belonging to this list. */
   const items = computed<ShoppingListItem[]>(() =>
     allItems.value.filter((item) => item.shoppingListId === shoppingListId),
-  )
+  );
 
   /**
    * Add a product to the list.
@@ -35,11 +45,11 @@ export function useShoppingList(shoppingListId: string) {
     const existing = allItems.value.find(
       (item) =>
         item.shoppingListId === shoppingListId && item.productId === productId,
-    )
+    );
 
     if (existing) {
-      existing.quantity += quantity
-      return existing
+      existing.quantity += quantity;
+      return existing;
     }
 
     const newItem: ShoppingListItem = {
@@ -47,14 +57,15 @@ export function useShoppingList(shoppingListId: string) {
       shoppingListId,
       productId,
       quantity,
-    }
-    allItems.value.push(newItem)
-    return newItem
+      createdAt: new Date(),
+    };
+    allItems.value.push(newItem);
+    return newItem;
   }
 
   /** Remove an item from the list by its item ID. */
   function removeItem(itemId: string): void {
-    allItems.value = allItems.value.filter((item) => item.id !== itemId)
+    allItems.value = allItems.value.filter((item) => item.id !== itemId);
   }
 
   /**
@@ -62,9 +73,9 @@ export function useShoppingList(shoppingListId: string) {
    * Enforces a minimum of 1 — quantity can never reach zero through this method.
    */
   function updateQuantity(itemId: string, quantity: number): void {
-    const item = allItems.value.find((i) => i.id === itemId)
+    const item = allItems.value.find((i) => i.id === itemId);
     if (item) {
-      item.quantity = Math.max(1, quantity)
+      item.quantity = Math.max(1, quantity);
     }
   }
 
@@ -73,5 +84,5 @@ export function useShoppingList(shoppingListId: string) {
     addItem,
     removeItem,
     updateQuantity,
-  }
+  };
 }

@@ -34,15 +34,15 @@ In future phases, the system will search prices across supermarkets and recommen
 │              Vue Frontend (Phase 1+)         │
 │  Shopping list management · Price results   │
 └────────────────────┬────────────────────────┘
-                     │  REST / Firebase
+                     │  PocketBase REST API / JS SDK
 ┌────────────────────▼────────────────────────┐
-│           Backend API (Phase 2+)             │
-│  Price search · Product matching             │
-│  Optimization logic                          │
+│        PocketBase Backend (Phase 1+)         │
+│  Auth · Database (SQLite) · REST API         │
+│  Admin UI · File storage                     │
 └────────────────────┬────────────────────────┘
-                     │  Reads from
+                     │  Phase 3+
 ┌────────────────────▼────────────────────────┐
-│         Scraper Workers (Phase 2+)           │
+│         Scraper Workers (Phase 3+)           │
 │  Collect prices periodically per store/zone  │
 └─────────────────────────────────────────────┘
 ```
@@ -240,13 +240,13 @@ The UI renders one card per store in the result.
 
 ## Phase Roadmap
 
-| Phase | Scope                                              | Status      |
-| ----- | -------------------------------------------------- | ----------- |
-| 1     | Shopping list management + product catalog         | ✅ Complete |
-| 2     | Firebase Auth + Firestore persistence              | Planned     |
-| 3     | Store catalog + scraper workers                    | Planned     |
-| 4     | Product matching engine                            | Planned     |
-| 5     | Price search + list optimisation                   | Planned     |
+| Phase | Scope                                                   | Status      |
+| ----- | ------------------------------------------------------- | ----------- |
+| 1     | Shopping list management + product catalog (PocketBase) | ✅ Active   |
+| 2     | Auth + full PocketBase persistence                      | Planned     |
+| 3     | Store catalog + scraper workers                         | Planned     |
+| 4     | Product matching engine                                 | Planned     |
+| 5     | Price search + list optimisation                        | Planned     |
 
 ---
 
@@ -257,9 +257,14 @@ See [CODING_RULES.md](./CODING_RULES.md) for the layer rules and [CONTRIBUTING.m
 ```
 src/
 ├── domain/       Framework-agnostic interfaces for all domain entities
-│   ├── productUtils.ts   ← computeUnitPrice, isWithinVolumeTolerance
+│   ├── productUtils.ts       ← computeUnitPrice, isWithinVolumeTolerance
 │   └── BasketOptimization.ts ← optimisation result shape
-├── services/     Data access (mock in Phase 1 → Firestore in Phase 2)
+├── services/     PocketBase data access (mock catalog in Phase 1)
+│   ├── pocketbase.ts         ← singleton PocketBase client
+│   ├── authService.ts        ← signup, login, logout
+│   ├── shoppingListService.ts
+│   ├── shoppingListItemService.ts
+│   └── productCatalogService.ts
 ├── composables/  Reactive state and business operations
 ├── components/   Presentational UI building blocks
 ├── views/        Pages — wire composables to components
