@@ -16,7 +16,7 @@
     "type-check": "vue-tsc -b --noEmit"
   },
   "dependencies": {
-    "@mrxploder/saxvue": "^0.3.0",
+    "@mrxploder/saxvue": "^0.6.0",
     "pocketbase": "^0.26.8",
     "vue": "^3.5.25",
     "vue-router": "^4.6.4"

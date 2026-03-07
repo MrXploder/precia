@@ -2,7 +2,7 @@
  * Domain models for Precia.
  *
  * These are plain TypeScript interfaces and pure utility functions —
- * no Vue, no Firebase, no framework coupling. They represent the core
+ * no Vue, no PocketBase, no framework coupling. They represent the core
  * concepts of the application and are reusable in any context
  * (UI, backend API, tests, scraper workers).
  *
@@ -26,6 +26,7 @@ export type {
 } from "./ProductCatalog";
 export type { ShoppingList } from "./ShoppingList";
 export type { ShoppingListItem } from "./ShoppingListItem";
+export type { ShoppingListItemWithProduct } from "./ShoppingListItemWithProduct";
 
 // ── Phase 1 — pure domain utilities ──────────────────────────────────────────
 // Framework-agnostic functions safe to use anywhere in the stack.

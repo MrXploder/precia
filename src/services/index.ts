@@ -10,7 +10,11 @@
  */
 
 // Product catalog (Phase 1: mock data · Phase 2: PocketBase)
-export { searchProducts, getProductById, getAllProducts } from './productCatalogService'
+export {
+  searchProducts,
+  getProductById,
+  getAllProducts,
+} from "./productCatalogService";
 
 // Shopping lists and items (PocketBase)
 export {
@@ -18,14 +22,15 @@ export {
   createShoppingList,
   updateShoppingList,
   deleteShoppingList,
-} from './shoppingListService'
+} from "./shoppingListService";
 
 export {
   fetchShoppingListItems,
   createShoppingListItem,
   updateShoppingListItemQuantity,
   deleteShoppingListItem,
-} from './shoppingListItemService'
+  fetchShoppingListItemsWithProducts,
+} from "./shoppingListItemService";
 
 // Authentication (PocketBase)
-export { signUp, login, logout, getCurrentUser } from './authService'
+export { signUp, login, logout, getCurrentUser } from "./authService";
