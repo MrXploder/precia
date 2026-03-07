@@ -32,30 +32,37 @@
 
 /**
  * A single product line within a store basket.
- * Links a shopping list item to the specific store product chosen for it.
+ * Links a catalog product to the specific store product chosen for it.
+ * Mirrors the `priceSearchResults` Firestore collection fields.
  */
 export interface BasketItem {
-  /** ID of the ShoppingListItem this result corresponds to. */
-  shoppingListItemId: string
+  /** ID of the canonical ProductCatalog entry this result covers. */
+  productId: string;
 
   /** ID of the StoreProduct selected as the best match. */
-  storeProductId: string
+  storeProductId: string;
+
+  /** ID of the store where the matched product is available. */
+  storeId: string;
+
+  /** Price of a single store-product unit (in local currency). */
+  price: number;
 
   /**
    * Number of store-product units required to satisfy the list item quantity.
    * May differ from ShoppingListItem.quantity when package sizes don't align.
    */
-  unitsRequired: number
-
-  /** Total price for this item (storeProduct.price × unitsRequired). */
-  totalPrice: number
+  matchedQuantity: number;
 
   /**
    * Normalised price per unit of measurement.
    * Used to show value-per-unit comparisons in the UI.
    * Computed via `computeUnitPrice` from productUtils.
    */
-  unitPrice: number
+  unitPrice: number;
+
+  /** Timestamp of when this result was computed. */
+  createdAt: Date;
 }
 
 /**
@@ -63,13 +70,13 @@ export interface BasketItem {
  */
 export interface StoreBasket {
   /** ID of the Store where these items should be purchased. */
-  storeId: string
+  storeId: string;
 
   /** Items assigned to this store basket. */
-  items: BasketItem[]
+  items: BasketItem[];
 
   /** Sum of all item prices in this basket. */
-  totalPrice: number
+  totalPrice: number;
 }
 
 /**
@@ -80,20 +87,20 @@ export interface StoreBasket {
  */
 export interface BasketOptimizationResult {
   /** Unique identifier for this optimisation result. */
-  id: string
+  id: string;
 
   /** ID of the PriceSearch this result belongs to. */
-  priceSearchId: string
+  priceSearchId: string;
 
   /**
    * Per-store baskets in the optimal solution.
    * Each basket lists the products to buy at that store.
    */
-  baskets: StoreBasket[]
+  baskets: StoreBasket[];
 
   /** Total cost across all baskets — the cheapest possible spend for the list. */
-  totalPrice: number
+  totalPrice: number;
 
   /** Timestamp of when optimisation was computed. */
-  createdAt: Date
+  createdAt: Date;
 }

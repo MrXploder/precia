@@ -18,13 +18,16 @@
 
 export interface PriceSearch {
   /** Unique identifier for this price search. */
-  id: string
+  id: string;
+
+  /** ID of the user who triggered the search. */
+  userId: string;
 
   /** ID of the ShoppingList this search was run for. */
-  shoppingListId: string
+  shoppingListId: string;
 
   /** Timestamp of when the search was performed. */
-  createdAt: Date
+  createdAt: Date;
 
   /**
    * Geographic zone used for this search.
@@ -32,5 +35,5 @@ export interface PriceSearch {
    *
    * Example: "santiago-centro", "santiago-oriente"
    */
-  zone: string
+  zone: string;
 }

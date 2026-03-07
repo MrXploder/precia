@@ -4,7 +4,7 @@
  * Used to express a product's quantity in a human-readable and
  * comparable format across different stores.
  */
-export type ProductUnit = 'kg' | 'gr' | 'lt' | 'ml' | 'unit'
+export type ProductUnit = "kg" | "gr" | "lt" | "ml" | "unit";
 
 /**
  * Describes how precisely a product is defined in the catalog.
@@ -15,7 +15,7 @@ export type ProductUnit = 'kg' | 'gr' | 'lt' | 'ml' | 'unit'
  *                (e.g. "Leche Colun Semidescremada 200ml").
  *                The brand matters for price comparison.
  */
-export type ProductType = 'generic' | 'specific'
+export type ProductType = "generic" | "specific";
 
 /**
  * A canonical product definition in the Precia catalog.
@@ -27,25 +27,25 @@ export type ProductType = 'generic' | 'specific'
  */
 export interface ProductCatalog {
   /** Unique product identifier. */
-  id: string
+  id: string;
 
   /** Human-readable product name shown to users. */
-  name: string
+  name: string;
 
   /** Whether this is a generic or brand-specific product. */
-  type: ProductType
+  type: ProductType;
 
   /**
    * Preferred brand for this product.
    * Only relevant when `type` is `'specific'`.
    */
-  preferredBrand?: string
+  preferredBrand?: string;
 
   /**
    * When `true`, only exact brand matches are valid during price comparison.
    * When `false`, any brand that satisfies the generic category is acceptable.
    */
-  strictBrand: boolean
+  strictBrand: boolean;
 
   /**
    * The reference quantity used when comparing prices across stores.
@@ -53,15 +53,38 @@ export interface ProductCatalog {
    *
    * Example: `targetQuantity: 1, unit: 'kg'` → prices are compared per 1 kg.
    */
-  targetQuantity: number
+  targetQuantity: number;
 
   /** Unit of measurement for `targetQuantity`. */
-  unit: ProductUnit
+  unit: ProductUnit;
 
   /**
    * Acceptable volume deviation percentage when matching store products.
    * A value of `10` means a ±10 % size difference is still considered equivalent.
    * Set to `0` for exact-match requirements.
    */
-  volumeTolerancePct: number
+  volumeTolerancePct: number;
+
+  /**
+   * High-level product category.
+   * Used for filtering and grouping in the catalog UI.
+   *
+   * Examples: `"despensa"`, `"lacteos"`, `"bebidas"`, `"limpieza"`
+   *
+   * Phase 2: will become a typed union once the full category list is stable.
+   */
+  category: string;
+
+  /**
+   * Keywords used by the product matching engine to link scraped store
+   * product names to this canonical entry.
+   *
+   * Examples for "Azúcar 1kg": `["azucar", "azucar blanca", "iansa", "azucar 1kg"]`
+   *
+   * Phase 4: consumed by the matching engine when comparing against StoreProduct names.
+   */
+  searchKeywords: string[];
+
+  /** Timestamp of when this catalog entry was created. */
+  createdAt: Date;
 }

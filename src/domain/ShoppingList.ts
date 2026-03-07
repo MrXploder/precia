@@ -7,14 +7,17 @@
  */
 export interface ShoppingList {
   /** Unique list identifier. */
-  id: string
+  id: string;
 
   /** ID of the user who owns this list. */
-  userId: string
+  userId: string;
 
   /** Display name of the list, chosen by the user. */
-  name: string
+  name: string;
 
   /** Timestamp of when the list was created. */
-  createdAt: Date
+  createdAt: Date;
+
+  /** Timestamp of the most recent update to the list or its items. */
+  updatedAt: Date;
 }
