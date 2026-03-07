@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -8,10 +8,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Force all elements — including buttons, inputs, and selects — to
+   inherit Poppins. Browsers apply their own font to form controls
+   by default, which overrides the :root declaration. */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: inherit;
 }
 
 body {

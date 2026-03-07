@@ -11,6 +11,7 @@
 import { createApp } from "vue";
 import SaxVue from "@mrxploder/saxvue";
 import "@mrxploder/saxvue/dist/saxvue.css";
+import "boxicons/css/boxicons.min.css";
 import App from "./App.vue";
 import router from "./router";
 import "./style.css";
