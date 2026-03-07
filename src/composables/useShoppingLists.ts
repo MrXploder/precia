@@ -8,9 +8,17 @@
  * components sharing this composable see the same data — a
  * lightweight alternative to a full state-management library.
  *
- * Phase 1: in-memory only.
- * Phase 2: swap the ref initialisation and mutation calls for
- *           Firestore reads/writes without touching the public API.
+ * Phase 1: in-memory only. IDs and timestamps are generated client-side.
+ *
+ * PocketBase migration (next step):
+ *   Replace the mutation calls below with their async PocketBase equivalents:
+ *
+ *   createList  →  createShoppingList(name, userId)     from '@/services'
+ *   deleteList  →  deleteShoppingList(id)               from '@/services'
+ *   Initial load → fetchShoppingLists(userId)           from '@/services'
+ *
+ *   The public API (lists, createList, deleteList, getListById) should
+ *   remain unchanged so views don't need to be updated.
  */
 import { ref, readonly } from "vue";
 import type { ShoppingList } from "@/domain";

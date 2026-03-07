@@ -11,8 +11,18 @@
  * `items` is a computed ref — it always reflects the current state of the
  * shared store filtered to the given list.
  *
- * Phase 1: in-memory only.
- * Phase 2: replace the module-level array with Firestore listeners.
+ * Phase 1: in-memory only. IDs and timestamps are generated client-side.
+ *
+ * PocketBase migration (next step):
+ *   Replace the mutation calls below with their async PocketBase equivalents:
+ *
+ *   addItem        →  createShoppingListItem(...)       from '@/services'
+ *   removeItem     →  deleteShoppingListItem(id)        from '@/services'
+ *   updateQuantity →  updateShoppingListItemQuantity()  from '@/services'
+ *   Initial load   →  fetchShoppingListItems(listId)    from '@/services'
+ *
+ *   The public API (items, addItem, removeItem, updateQuantity) should
+ *   remain unchanged so views don't need to be updated.
  */
 import { ref, computed } from "vue";
 import type { ShoppingListItem } from "@/domain";
