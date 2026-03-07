@@ -1,0 +1,18 @@
+{
+  // Use Volar's TypeScript language server for all Vue files.
+  "vue.server.hybridMode": true,
+
+  // Consistent formatting on save.
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "Vue.volar",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Surface TypeScript errors for Vue files immediately.
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

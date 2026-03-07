@@ -1,0 +1,9 @@
+{
+  // Recommended extensions for contributing to Precia.
+  // VS Code will prompt to install these when you open the workspace.
+  "recommendations": [
+    "Vue.volar", // Vue 3 language support + type-checking
+    "esbenp.prettier-vscode", // Code formatter
+    "antfu.vite" // Vite dev-server integration
+  ]
+}
