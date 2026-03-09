@@ -22,6 +22,12 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  /* Hook into saxvue's theme variables so the entire app reacts to
+     dark/light mode. saxvue sets --sv-background and --sv-text on
+     :root and overrides them under [vs-theme=dark] on body. */
+  background-color: rgba(var(--sv-background), 1);
+  color: rgba(var(--sv-text), 1);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #app {

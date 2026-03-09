@@ -61,6 +61,7 @@ const { items, addItem, removeItem, updateQuantity } = useShoppingList(listId.va
 const showProductSearch = ref(false)
 
 function handleAddProduct(product: ProductCatalog) {
+  console.log('Selected product to add:', product)
   addItem(product.id, 1)
 }
 

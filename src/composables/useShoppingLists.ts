@@ -8,7 +8,7 @@
  * components sharing this composable see the same data — a
  * lightweight alternative to a full state-management library.
  *
- * Phase 1: in-memory only. IDs and timestamps are generated client-side.
+ * Phase 1: localStorage persistence. IDs and timestamps are generated client-side.
  *
  * PocketBase migration (next step):
  *   Replace the mutation calls below with their async PocketBase equivalents:
@@ -23,8 +23,32 @@
 import { ref, readonly } from "vue";
 import type { ShoppingList } from "@/domain";
 
+const STORAGE_KEY = "precia:shopping-lists";
+
+/** Load lists from localStorage or initialize empty array. */
+function loadListsFromStorage(): ShoppingList[] {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return [];
+  try {
+    const parsed = JSON.parse(stored);
+    // Revive Date objects from ISO strings
+    return (Array.isArray(parsed) ? parsed : []).map((list: any) => ({
+      ...list,
+      createdAt: new Date(list.createdAt),
+      updatedAt: new Date(list.updatedAt),
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/** Persist lists to localStorage. */
+function saveListsToStorage(lists: ShoppingList[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lists));
+}
+
 // Module-level state — shared across every composable instance.
-const lists = ref<ShoppingList[]>([]);
+const lists = ref<ShoppingList[]>(loadListsFromStorage());
 
 export function useShoppingLists() {
   /** Create a new shopping list and add it to the collection. */
@@ -37,12 +61,28 @@ export function useShoppingLists() {
       updatedAt: new Date(),
     };
     lists.value.push(newList);
+    saveListsToStorage(lists.value);
     return newList;
   }
 
   /** Remove a list by ID. Also removes its items via useShoppingList's shared state. */
   function deleteList(listId: string): void {
     lists.value = lists.value.filter((l) => l.id !== listId);
+    saveListsToStorage(lists.value);
+    // Also clean up items for this list from localStorage
+    const itemsKey = "precia:shopping-list-items";
+    const stored = localStorage.getItem(itemsKey);
+    if (stored) {
+      try {
+        const items = JSON.parse(stored);
+        const filtered = items.filter(
+          (item: any) => item.shoppingListId !== listId,
+        );
+        localStorage.setItem(itemsKey, JSON.stringify(filtered));
+      } catch {
+        // Ignore parse errors
+      }
+    }
   }
 
   /** Return a single list by ID, or `undefined` if not found. */

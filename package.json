@@ -1,7 +1,7 @@
 {
   "name": "precia",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Open source SaaS app to manage supermarket shopping lists and compare prices across stores.",
   "license": "MIT",
   "repository": {
@@ -16,7 +16,7 @@
     "type-check": "vue-tsc -b --noEmit"
   },
   "dependencies": {
-    "@mrxploder/saxvue": "^0.6.0",
+    "@mrxploder/saxvue": "^0.14.0",
     "pocketbase": "^0.26.8",
     "vue": "^3.5.25",
     "vue-router": "^4.6.4"

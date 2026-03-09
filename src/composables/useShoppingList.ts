@@ -5,13 +5,15 @@
  * and filtered by `shoppingListId`. This keeps the composable stateless from
  * the caller's perspective while still being a single reactive source of truth.
  *
+ * Items are persisted to localStorage for persistence across page reloads.
+ *
  * Usage:
  *   const { items, addItem, removeItem, updateQuantity } = useShoppingList(listId)
  *
  * `items` is a computed ref — it always reflects the current state of the
  * shared store filtered to the given list.
  *
- * Phase 1: in-memory only. IDs and timestamps are generated client-side.
+ * Phase 1: localStorage persistence. IDs and timestamps are generated client-side.
  *
  * PocketBase migration (next step):
  *   Replace the mutation calls below with their async PocketBase equivalents:
@@ -27,8 +29,31 @@
 import { ref, computed } from "vue";
 import type { ShoppingListItem } from "@/domain";
 
+const STORAGE_KEY = "precia:shopping-list-items";
+
+/** Load items from localStorage or initialize empty array. */
+function loadItemsFromStorage(): ShoppingListItem[] {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return [];
+  try {
+    const parsed = JSON.parse(stored);
+    // Revive Date objects from ISO strings
+    return (Array.isArray(parsed) ? parsed : []).map((item: any) => ({
+      ...item,
+      createdAt: new Date(item.createdAt),
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/** Persist items to localStorage. */
+function saveItemsToStorage(items: ShoppingListItem[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
 // Module-level state — a flat pool of all items across all lists.
-const allItems = ref<ShoppingListItem[]>([]);
+const allItems = ref<ShoppingListItem[]>(loadItemsFromStorage());
 
 export function useShoppingList(shoppingListId: string) {
   /** Reactive, filtered view of items belonging to this list. */
@@ -42,6 +67,9 @@ export function useShoppingList(shoppingListId: string) {
    * of creating a duplicate entry.
    */
   function addItem(productId: string, quantity: number = 1): ShoppingListItem {
+    console.log(
+      `Adding product ${productId} with quantity ${quantity} to list ${shoppingListId}`,
+    );
     const existing = allItems.value.find(
       (item) =>
         item.shoppingListId === shoppingListId && item.productId === productId,
@@ -49,6 +77,7 @@ export function useShoppingList(shoppingListId: string) {
 
     if (existing) {
       existing.quantity += quantity;
+      saveItemsToStorage(allItems.value);
       return existing;
     }
 
@@ -60,12 +89,14 @@ export function useShoppingList(shoppingListId: string) {
       createdAt: new Date(),
     };
     allItems.value.push(newItem);
+    saveItemsToStorage(allItems.value);
     return newItem;
   }
 
   /** Remove an item from the list by its item ID. */
   function removeItem(itemId: string): void {
     allItems.value = allItems.value.filter((item) => item.id !== itemId);
+    saveItemsToStorage(allItems.value);
   }
 
   /**
@@ -76,6 +107,7 @@ export function useShoppingList(shoppingListId: string) {
     const item = allItems.value.find((i) => i.id === itemId);
     if (item) {
       item.quantity = Math.max(1, quantity);
+      saveItemsToStorage(allItems.value);
     }
   }
 
