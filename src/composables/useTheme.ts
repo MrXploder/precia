@@ -26,11 +26,7 @@
  *   const { isDark, toggleTheme } = useTheme()
  */
 import { ref, getCurrentInstance } from "vue";
-
-type SvApi = {
-  setTheme: (theme: "dark" | "light") => "dark" | "light";
-  toggleTheme: () => "dark" | "light";
-};
+import type { SaxVueFunctions } from "@mrxploder/saxvue";
 
 /** Module-level reactive state — shared across all component instances. */
 const isDark = ref<boolean>(
@@ -58,21 +54,18 @@ function bootstrapTheme(dark: boolean): void {
 bootstrapTheme(isDark.value);
 
 /** Lazily resolved $sv reference — set once on first useTheme() call. */
-let $sv: SvApi | null = null;
+let $sv: SaxVueFunctions | null = null;
 
 export function useTheme() {
   // Resolve $sv on first call. getCurrentInstance() is valid here because
   // useTheme() is always called from inside a component's setup().
   if (!$sv) {
     const instance = getCurrentInstance();
-    $sv =
-      (instance?.appContext.config.globalProperties["$sv"] as unknown as SvApi) ?? null;
+    $sv = instance?.appContext.config.globalProperties.$sv ?? null;
   }
 
   function toggleTheme(): void {
     if ($sv) {
-      // $sv.toggleTheme() handles DOM, localStorage, and vs-remove-transition.
-      // It returns the new theme ('dark' | 'light').
       const next = $sv.toggleTheme();
       isDark.value = next === "dark";
     } else {

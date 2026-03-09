@@ -14,53 +14,37 @@
 <template>
   <div class="item-table">
     <sv-table v-if="enrichedItems.length > 0">
-      <template #header>
-        <sv-th>Producto</sv-th>
-        <sv-th>Tipo</sv-th>
-        <sv-th>Cantidad</sv-th>
-        <sv-th>Unidad</sv-th>
-        <sv-th>Acciones</sv-th>
+      <template #thead>
+        <sv-table-th>Producto</sv-table-th>
+        <sv-table-th>Tipo</sv-table-th>
+        <sv-table-th>Cantidad</sv-table-th>
+        <sv-table-th>Unidad</sv-table-th>
+        <sv-table-th>Acciones</sv-table-th>
       </template>
-      <template #body>
-        <sv-tr v-for="item in enrichedItems" :key="item.id">
-          <sv-td>{{ item.productName }}</sv-td>
-          <sv-td>
+      <template #tbody>
+        <sv-table-tr v-for="item in enrichedItems" :key="item.id">
+          <sv-table-td>{{ item.productName }}</sv-table-td>
+          <sv-table-td>
             <ProductTypeBadge :type="item.productType" />
-          </sv-td>
-          <sv-td>
+          </sv-table-td>
+          <sv-table-td>
             <div class="quantity-controls">
-              <sv-button
-                flat
-                icon
-                size="small"
-                @click="$emit('update-quantity', item.id, item.quantity - 1)"
-              >
+              <sv-button flat icon size="small" @click="$emit('update-quantity', item.id, item.quantity - 1)">
                 <i class="bx bx-minus"></i>
               </sv-button>
               <span class="quantity-value">{{ item.quantity }}</span>
-              <sv-button
-                flat
-                icon
-                size="small"
-                @click="$emit('update-quantity', item.id, item.quantity + 1)"
-              >
+              <sv-button flat icon size="small" @click="$emit('update-quantity', item.id, item.quantity + 1)">
                 <i class="bx bx-plus"></i>
               </sv-button>
             </div>
-          </sv-td>
-          <sv-td>{{ item.unit }}</sv-td>
-          <sv-td>
-            <sv-button
-              flat
-              icon
-              danger
-              size="small"
-              @click="$emit('remove', item.id)"
-            >
+          </sv-table-td>
+          <sv-table-td>{{ item.unit }}</sv-table-td>
+          <sv-table-td>
+            <sv-button flat icon danger size="small" @click="$emit('remove', item.id)">
               <i class="bx bx-trash"></i>
             </sv-button>
-          </sv-td>
-        </sv-tr>
+          </sv-table-td>
+        </sv-table-tr>
       </template>
     </sv-table>
 
@@ -76,6 +60,7 @@
 import type { ShoppingListItem } from '@/domain'
 import { useEnrichedItems } from '@/composables'
 import ProductTypeBadge from '@/components/ProductTypeBadge.vue'
+
 const props = defineProps<{
   items: ShoppingListItem[]
 }>()
